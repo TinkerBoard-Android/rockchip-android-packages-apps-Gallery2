@@ -395,6 +395,18 @@ public class DataManager implements StitchingChangeListener {
         return path;
     }
 
+    public static String convertStorageToMntCanWrite(String path) {
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O_MR1
+                && isExtendStorage(path)) {
+            String[] pathSplit = path.split("/");
+            if (null != pathSplit && pathSplit.length > 3
+                && new File(MNT_PATH + "/" + pathSplit[2]).canWrite()) {
+                return path.replaceFirst(STORAGE_REGEX, MNT_PATH);
+            }
+        }
+        return path;
+    }
+
     private static boolean isExtendStorage(String path) {
         return null != path && path.startsWith("/storage/")
                 && !path.startsWith("/storage/emulated/");

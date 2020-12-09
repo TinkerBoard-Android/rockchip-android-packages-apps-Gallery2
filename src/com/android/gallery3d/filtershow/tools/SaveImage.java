@@ -32,6 +32,7 @@ import android.widget.Toast;
 
 import com.android.gallery3d.R;
 import com.android.gallery3d.common.Utils;
+import com.android.gallery3d.data.DataManager;
 import com.android.gallery3d.exif.ExifInterface;
 import com.android.gallery3d.filtershow.FilterShowActivity;
 import com.android.gallery3d.filtershow.cache.ImageLoader;
@@ -268,7 +269,8 @@ public class SaveImage {
         boolean ret = false;
         OutputStream s = null;
         try {
-            s = exif.getExifWriterStream(file.getAbsolutePath());
+            s = exif.getExifWriterStream(
+                    DataManager.convertStorageToMntCanWrite(file.getAbsolutePath()));
             image.compress(Bitmap.CompressFormat.JPEG,
                     (jpegCompressQuality > 0) ? jpegCompressQuality : 1, s);
             s.flush();
