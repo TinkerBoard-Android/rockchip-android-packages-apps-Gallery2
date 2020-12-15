@@ -16,8 +16,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -61,6 +63,9 @@ public class GifTextrue{
     public InputStream getInputStream() {
 //      Log.v("GifTextrue", "=====================mFilePath:"+mFilePath);
         try {
+            if (null != mUri && null != mContext) {
+                return mContext.getContentResolver().openInputStream(mUri);
+            }
             return new FileInputStream(new File(mFilePath));
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -145,6 +150,8 @@ public class GifTextrue{
     private static final String TAG = "GifTextrue";
     private GifHandler mHandler;
     private String mFilePath;
+    private Uri mUri;
+    private Context mContext;
 
     /** the animation will start when decoder is ready */
 
@@ -177,6 +184,13 @@ public class GifTextrue{
         mBitmap = bitmap;
         mFilePath = filePath;
 
+    }
+
+    public GifTextrue(TileImageView t,Bitmap bitmap,Context context,Uri uri) {
+        mTileImageView = t;
+        mBitmap = bitmap;
+        mContext = context;
+        mUri = uri;
     }
 
     public static String THREAD_NAME = "GifThead";

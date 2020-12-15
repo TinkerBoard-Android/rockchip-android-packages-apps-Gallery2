@@ -16,6 +16,7 @@
 
 package com.android.gallery3d.ui;
 
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
@@ -283,12 +284,18 @@ public class TileImageView extends GLView {
                     if (c != null) {
                         c.moveToFirst();
                         filePath = c.getString(0);
-                        if(filePath == null){
+                        if (null != filePath) {
+                            GifTextrueFactory.startOnly(new GifTextrue(this, null,
+                                    filePath));
+                        } else if (null != mUri
+                                && ContentResolver.SCHEME_CONTENT.equals(mUri.getScheme())) {
+                            Log.w(TAG, "gif uri=" + mUri);
+                            GifTextrueFactory.startOnly(new GifTextrue(this, null,
+                                    mContext.getApplicationContext(), mUri));
+                        } else {
                             isGifPic = false;
                             return;
                         }
-                        GifTextrueFactory.startOnly(new GifTextrue(this, null,
-                                filePath));
                         c.close();
                         c = null;
                     }else{
@@ -707,6 +714,7 @@ public class TileImageView extends GLView {
                 }
             }else{
                 if(filePath == null){
+                    Log.w(TAG, "filePath is Null during render, set isGifPic false");
                     isGifPic = false;
                     return;
                 }
