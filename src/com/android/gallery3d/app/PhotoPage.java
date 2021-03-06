@@ -826,6 +826,10 @@ public abstract class PhotoPage extends ActivityState implements
                 supportedOperations &= ~MediaObject.SUPPORT_EDIT;
             }
         }
+        if (DataManager.isExtendStorage(mCurrentPhoto.getFilePath())) {
+            supportedOperations &= ~MediaObject.SUPPORT_EDIT;
+            supportedOperations &= ~MediaObject.SUPPORT_CROP;
+        }
         MenuExecutor.updateMenuOperation(menu, supportedOperations);
     }
 

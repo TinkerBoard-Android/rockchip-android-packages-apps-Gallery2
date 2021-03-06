@@ -407,7 +407,7 @@ public class DataManager implements StitchingChangeListener {
         return path;
     }
 
-    private static boolean isExtendStorage(String path) {
+    public static boolean isExtendStorage(String path) {
         return null != path && path.startsWith("/storage/")
                 && !path.startsWith("/storage/emulated/");
     }
